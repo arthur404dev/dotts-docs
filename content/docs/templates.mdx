@@ -1,0 +1,173 @@
+---
+title: Templates
+description: Using template variables in your dotfiles
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+# Templates
+
+dotts supports template placeholders in your config files. These are replaced with actual values during the linking process, allowing you to keep personal information out of your repository while still using it in your configs.
+
+## Syntax
+
+Template placeholders use the format:
+
+```
+<<dotts:variable.name>>
+```
+
+For example:
+
+```ini
+[user]
+  name = <<dotts:user.name>>
+  email = <<dotts:user.email>>
+```
+
+## Available Variables
+
+### User Information
+
+These are collected during `dotts init`:
+
+| Variable | Description |
+|----------|-------------|
+| `user.name` | Your full name |
+| `user.email` | Your email address |
+| `user.github` | Your GitHub username |
+
+### System Information
+
+Automatically detected:
+
+| Variable | Description |
+|----------|-------------|
+| `system.hostname` | Machine hostname |
+| `system.os` | Operating system (linux, darwin) |
+| `system.distro` | Linux distribution |
+| `system.arch` | CPU architecture |
+
+### Settings
+
+Any settings from your profile chain:
+
+| Variable | Description |
+|----------|-------------|
+| `settings.shell` | Configured shell |
+| `settings.editor` | Configured editor |
+| `settings.theme` | Color theme |
+| `settings.*` | Any custom setting |
+
+## Examples
+
+### Git Configuration
+
+```ini
+# configs/git/.config/git/config
+
+[user]
+  name = <<dotts:user.name>>
+  email = <<dotts:user.email>>
+  signingkey = <<dotts:user.email>>
+
+[github]
+  user = <<dotts:user.github>>
+```
+
+### SSH Config
+
+```
+# configs/shell/.ssh/config
+
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+```
+
+### Shell Greeting
+
+```fish
+# configs/shell/.config/fish/config.fish
+
+set -g fish_greeting "Welcome back, <<dotts:user.name>>!"
+```
+
+## Template Processing
+
+<Callout type="info">
+  Templates are processed during `dotts init` and `dotts update`. The resolved files are written to your home directory (not symlinked).
+</Callout>
+
+### How It Works
+
+1. dotts detects files with `<<dotts:...>>` placeholders
+2. Values are resolved from your personal config and settings
+3. The file is processed and written to the target location
+4. A record is kept in the manifest for future updates
+
+### Updating Templates
+
+When you run `dotts update`, template files are re-processed with current values:
+
+```bash
+dotts update
+# Re-processes any files containing templates
+```
+
+## Personal Config
+
+Your personal information is stored locally (never committed):
+
+```
+~/.local/share/dotts/personal.yaml
+```
+
+```yaml
+name: Your Name
+email: you@example.com
+github: yourusername
+```
+
+This file is created during `dotts init` and can be edited manually.
+
+## Settings in Templates
+
+Profile settings are also available:
+
+```yaml
+# profiles/desktop.yaml
+settings:
+  monitors: 3
+  compositor: hyprland
+```
+
+Use in templates:
+
+```
+# hyprland.conf
+# Auto-generated for <<dotts:settings.monitors>> monitors
+```
+
+## Best Practices
+
+1. **Use for secrets** - Keep emails, names, and keys out of git
+2. **Keep it simple** - Templates work best for simple substitutions
+3. **Document variables** - Add comments showing expected values
+4. **Test locally** - Run `dotts update --dry-run` to preview
+
+<Callout type="warn">
+  Don't use templates for complex logic. For that, consider using separate alternate files or external scripts.
+</Callout>
+
+## Debugging
+
+To see the resolved values:
+
+```bash
+dotts status --verbose
+```
+
+This shows all available template variables and their current values.

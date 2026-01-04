@@ -1,0 +1,209 @@
+---
+title: Packages
+description: Managing packages across different package managers
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+# Packages
+
+dotts supports multiple package managers, allowing you to define packages in a unified format and have them installed using the appropriate manager for each system.
+
+## Supported Package Managers
+
+| Manager | Platform | Description |
+|---------|----------|-------------|
+| `nix` | Cross-platform | Declarative, reproducible packages |
+| `brew` | macOS | Homebrew formulae |
+| `cask` | macOS | Homebrew casks (GUI apps) |
+| `pacman` | Arch Linux | Official repositories |
+| `yay/paru` | Arch Linux | AUR packages |
+| `apt` | Debian/Ubuntu | APT packages |
+| `dnf` | Fedora | DNF packages |
+
+## Package Manifest Format
+
+Package manifests are YAML files in the `packages/` directory:
+
+```yaml
+# packages/common.yaml - Cross-platform packages
+
+nix:
+  - ripgrep
+  - fd
+  - fzf
+  - bat
+  - eza
+  - delta
+  - lazygit
+  - btop
+  - fastfetch
+  - starship
+  - zoxide
+```
+
+```yaml
+# packages/arch.yaml - Arch Linux specific
+
+system:
+  arch:
+    # Core system
+    - base-devel
+    - git
+    - openssh
+    
+    # Shell
+    - fish
+    - starship
+    - zoxide
+    
+    # Terminal
+    - kitty
+    - foot
+    
+    # Desktop
+    - hyprland
+    - waybar
+    - dunst
+    - fuzzel
+
+aur:
+  - yay-bin
+  - visual-studio-code-bin
+```
+
+```yaml
+# packages/darwin.yaml - macOS specific
+
+brew:
+  - fish
+  - starship
+  - neovim
+  - ripgrep
+  - fd
+
+cask:
+  - kitty
+  - visual-studio-code
+  - discord
+  - spotify
+```
+
+## Package Categories
+
+### Nix Packages
+
+Cross-platform packages installed via Nix. These work on both Linux and macOS:
+
+```yaml
+nix:
+  - ripgrep
+  - fd
+  - bat
+```
+
+<Callout type="info">
+  Nix packages are installed using `nix profile install` (modern) or `nix-env` (legacy), depending on your Nix installation.
+</Callout>
+
+### System Packages
+
+Platform-specific packages using the native package manager:
+
+```yaml
+system:
+  arch:
+    - hyprland
+    - waybar
+  debian:
+    - i3
+    - polybar
+  ubuntu:
+    - gnome-tweaks
+  fedora:
+    - sway
+```
+
+### AUR Packages (Arch Linux)
+
+Packages from the Arch User Repository, installed via `yay` or `paru`:
+
+```yaml
+aur:
+  - visual-studio-code-bin
+  - spotify
+  - discord
+```
+
+### Homebrew (macOS)
+
+Formulae and casks for macOS:
+
+```yaml
+brew:
+  - fish
+  - neovim
+  - tmux
+
+cask:
+  - kitty
+  - firefox
+  - slack
+```
+
+## Profile Integration
+
+Reference package manifests in your profiles:
+
+```yaml
+# profiles/base.yaml
+packages:
+  - common
+
+# profiles/linux.yaml
+packages:
+  - arch
+
+# profiles/darwin.yaml
+packages:
+  - darwin
+```
+
+## Install Process
+
+When dotts applies your configuration:
+
+1. **Detection** - Identifies available package managers
+2. **Planning** - Creates an installation plan per manager
+3. **Filtering** - Skips already-installed packages
+4. **Installation** - Runs each package manager
+5. **Verification** - Confirms successful installation
+
+## Idempotency
+
+dotts checks if packages are already installed before attempting installation:
+
+```
+Installing packages...
+  nix (12 packages)
+    ✓ ripgrep (already installed)
+    ✓ fd (already installed)
+    → installing bat...
+    → installing eza...
+```
+
+## Best Practices
+
+1. **Use Nix for CLI tools** - Maximum portability
+2. **Use system packages for desktop apps** - Better integration
+3. **Group related packages** - Create logical manifests
+4. **Document unusual packages** - Add comments for context
+
+```yaml
+# Catppuccin theme dependencies
+system:
+  arch:
+    - kvantum           # Qt theming
+    - qt5ct             # Qt5 configuration
+    - nwg-look          # GTK theming
+```

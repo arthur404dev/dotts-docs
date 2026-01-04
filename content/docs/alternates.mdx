@@ -1,0 +1,161 @@
+---
+title: Alternate Files
+description: Machine-specific configurations using the ## pattern
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+
+# Alternate Files
+
+Alternate files allow you to maintain different versions of the same config file for different systems. dotts uses the `##` suffix pattern (inspired by [yadm](https://yadm.io)) to select the appropriate file.
+
+## Concept
+
+Instead of maintaining separate repositories for each machine, you can have multiple versions of a file in the same directory:
+
+<Files>
+  <Folder name="configs/terminal/.config/kitty" defaultOpen>
+    <File name="kitty.conf" />
+    <File name="kitty.conf##os.darwin" />
+    <File name="kitty.conf##os.linux" />
+    <File name="kitty.conf##hostname.workstation" />
+  </Folder>
+</Files>
+
+dotts automatically selects the most specific matching file for the current system.
+
+## Pattern Syntax
+
+Alternate files use the format:
+
+```
+filename##attribute.value
+```
+
+You can chain multiple attributes:
+
+```
+filename##os.linux##hostname.mypc
+```
+
+## Available Attributes
+
+| Attribute | Description | Example Values |
+|-----------|-------------|----------------|
+| `os` | Operating system | `linux`, `darwin` |
+| `distro` | Linux distribution | `arch`, `ubuntu`, `debian`, `fedora` |
+| `hostname` | Machine hostname | `workstation`, `laptop` |
+| `profile` | Active profile | `desktop`, `server`, `notebook` |
+
+## Selection Priority
+
+When multiple alternates match, dotts selects based on specificity:
+
+1. `hostname` (most specific)
+2. `profile`
+3. `distro`
+4. `os` (least specific)
+
+If no alternate matches, the base file (without `##`) is used.
+
+## Examples
+
+### OS-Specific Configs
+
+```ini
+# kitty.conf - default
+font_size 12.0
+
+# kitty.conf##os.darwin - macOS specific
+font_size 14.0
+macos_option_as_alt yes
+macos_titlebar_color background
+```
+
+### Distribution-Specific Configs
+
+```bash
+# .bashrc##distro.arch
+alias update='sudo pacman -Syu'
+
+# .bashrc##distro.ubuntu
+alias update='sudo apt update && sudo apt upgrade'
+```
+
+### Hostname-Specific Configs
+
+```yaml
+# hyprland.conf##hostname.workstation
+monitor = DP-1, 2560x1440@144, 0x0, 1
+monitor = DP-2, 2560x1440@144, 2560x0, 1
+monitor = HDMI-A-1, 2560x1440@60, 5120x0, 1
+
+# hyprland.conf##hostname.laptop
+monitor = eDP-1, 1920x1080@60, 0x0, 1
+```
+
+### Profile-Specific Configs
+
+```ini
+# waybar/config##profile.desktop
+{
+    "layer": "top",
+    "modules-right": ["network", "pulseaudio", "clock"]
+}
+
+# waybar/config##profile.notebook
+{
+    "layer": "top",
+    "modules-right": ["network", "pulseaudio", "battery", "clock"]
+}
+```
+
+## Chaining Attributes
+
+You can combine attributes for very specific matching:
+
+```
+kitty.conf##os.linux##distro.arch##hostname.workstation
+```
+
+<Callout type="info">
+  Chained attributes must all match for the file to be selected. More attributes = higher priority.
+</Callout>
+
+## Best Practices
+
+1. **Start with a base file** - Always have a default without `##`
+2. **Use the least specific attribute** - Don't use `hostname` when `os` suffices
+3. **Keep alternates minimal** - Only include the differences
+4. **Document unusual alternates** - Add comments explaining why
+
+### Example: Minimal Differences
+
+Instead of duplicating entire config files:
+
+```ini
+# kitty.conf - shared config
+include theme.conf
+font_family JetBrains Mono
+font_size 12.0
+
+# Additional OS-specific settings loaded below
+include local.conf
+
+# kitty.conf##os.darwin → local.conf
+macos_option_as_alt yes
+
+# kitty.conf##os.linux → local.conf
+linux_display_server wayland
+```
+
+## Debugging
+
+Use `dotts status` to see which alternates are being used:
+
+```bash
+dotts status --verbose
+```
+
+This shows the resolved file for each config with alternates available.

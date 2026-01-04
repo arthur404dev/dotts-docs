@@ -1,0 +1,195 @@
+---
+title: Profiles
+description: Understanding profile inheritance and configuration
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+# Profiles
+
+Profiles are the core organizational unit in dotts. They define logical groupings of configurations, packages, and settings that can be composed through inheritance.
+
+## Concept
+
+Think of profiles as layers that stack on top of each other:
+
+```
+┌─────────────────────────────────────┐
+│           machine config            │  (most specific)
+├─────────────────────────────────────┤
+│          desktop profile            │
+├─────────────────────────────────────┤
+│           linux profile             │
+├─────────────────────────────────────┤
+│           base profile              │  (most generic)
+└─────────────────────────────────────┘
+```
+
+Each layer can add configs, packages, and settings. More specific layers override settings from generic ones.
+
+## Profile Structure
+
+```yaml
+# profiles/base.yaml
+name: base
+description: Universal base configuration
+
+configs:
+  - shell
+  - git
+  - tools
+
+packages:
+  - common
+
+settings:
+  shell: fish
+  editor: nvim
+  theme: catppuccin
+
+scripts:
+  post_install:
+    - ./scripts/setup-shell.sh
+```
+
+### Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Profile identifier |
+| `description` | string | Human-readable description |
+| `inherits` | list | Profiles to inherit from |
+| `configs` | list | Config directories to include |
+| `packages` | list | Package manifests to include |
+| `settings` | map | Key-value settings |
+| `scripts` | object | Lifecycle scripts |
+
+## Inheritance
+
+Profiles can inherit from other profiles using the `inherits` field:
+
+```yaml
+# profiles/linux.yaml
+name: linux
+description: Linux-specific configuration
+
+inherits:
+  - base
+
+configs:
+  - terminal
+
+packages:
+  - arch
+```
+
+```yaml
+# profiles/desktop.yaml
+name: desktop
+description: Desktop workstation with Hyprland
+
+inherits:
+  - linux
+
+configs:
+  - editor
+  - wm
+
+settings:
+  compositor: hyprland
+  bar: waybar
+```
+
+### Inheritance Rules
+
+1. **Configs** are merged (union of all configs in the chain)
+2. **Packages** are merged (union of all package manifests)
+3. **Settings** are merged with override (child overrides parent)
+4. **Scripts** are concatenated (all scripts run in order)
+
+## Common Patterns
+
+### Platform Profiles
+
+```yaml
+# profiles/linux.yaml
+name: linux
+inherits: [base]
+packages: [linux-common]
+
+# profiles/darwin.yaml
+name: darwin
+inherits: [base]
+packages: [darwin-common]
+```
+
+### Use Case Profiles
+
+```yaml
+# profiles/server.yaml
+name: server
+inherits: [linux]
+configs: [shell, tools]
+
+# profiles/desktop.yaml
+name: desktop
+inherits: [linux]
+configs: [shell, editor, terminal, wm]
+
+# profiles/notebook.yaml
+name: notebook
+inherits: [desktop]
+settings:
+  monitors: 1
+  battery: true
+```
+
+## Settings
+
+Settings flow through the inheritance chain and can be overridden at any level:
+
+```yaml
+# base.yaml
+settings:
+  theme: catppuccin
+  monitors: 1
+
+# desktop.yaml
+settings:
+  monitors: 2  # overrides base
+
+# machine config
+settings:
+  monitors: 3  # overrides desktop
+```
+
+<Callout type="info">
+  Settings are available as template variables. See [Templates](/docs/templates) for more information.
+</Callout>
+
+## Scripts
+
+Lifecycle scripts run at specific points during setup:
+
+```yaml
+scripts:
+  pre_install:
+    - ./scripts/pre-setup.sh
+  post_install:
+    - ./scripts/configure-shell.sh
+    - ./scripts/setup-neovim.sh
+  pre_update:
+    - ./scripts/backup-configs.sh
+  post_update:
+    - ./scripts/reload-configs.sh
+```
+
+Scripts from parent profiles run before child profile scripts.
+
+## Best Practices
+
+1. **Keep base minimal** - Only include truly universal configs
+2. **Use clear naming** - Profile names should be descriptive
+3. **Avoid deep nesting** - 3-4 levels of inheritance is usually enough
+4. **Document settings** - Add descriptions to non-obvious settings
+5. **Test inheritance** - Use `dotts status` to verify the resolved config

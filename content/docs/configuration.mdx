@@ -1,0 +1,213 @@
+---
+title: Configuration
+description: Understanding the dotts configuration structure
+---
+
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+# Configuration
+
+dotts uses a structured YAML-based configuration system. Your configuration repository contains profiles, packages, machines, and the actual config files.
+
+## Repository Structure
+
+<Files>
+  <Folder name="your-dotfiles" defaultOpen>
+    <File name="config.yaml" />
+    <Folder name="profiles" defaultOpen>
+      <File name="base.yaml" />
+      <File name="linux.yaml" />
+      <File name="darwin.yaml" />
+      <File name="desktop.yaml" />
+    </Folder>
+    <Folder name="packages" defaultOpen>
+      <File name="common.yaml" />
+      <File name="arch.yaml" />
+      <File name="darwin.yaml" />
+    </Folder>
+    <Folder name="machines">
+      <File name="workstation.yaml" />
+      <File name="laptop.yaml" />
+    </Folder>
+    <Folder name="configs" defaultOpen>
+      <File name="shell/" />
+      <File name="editor/" />
+      <File name="terminal/" />
+    </Folder>
+  </Folder>
+</Files>
+
+## config.yaml
+
+The root configuration file defines repository metadata and defaults:
+
+```yaml
+name: my-dotfiles
+description: My personal dotfiles
+version: "1.0.0"
+
+default_machine: workstation
+
+features:
+  - ssh
+  - github
+  - docker
+```
+
+## Profiles
+
+Profiles define logical groupings of configurations. They support inheritance for maximum reusability.
+
+```yaml
+# profiles/base.yaml
+name: base
+description: Universal base configuration
+
+configs:
+  - shell
+  - git
+  - tools
+
+packages:
+  - common
+
+settings:
+  shell: fish
+  editor: nvim
+  theme: catppuccin
+```
+
+```yaml
+# profiles/desktop.yaml
+name: desktop
+description: Desktop workstation with GUI
+
+inherits:
+  - linux
+
+configs:
+  - editor
+  - wm
+
+settings:
+  compositor: hyprland
+  bar: waybar
+```
+
+### Inheritance Chain
+
+Profiles can inherit from other profiles, creating a chain:
+
+```
+base → linux → desktop → machine
+```
+
+Settings and configs are merged, with more specific profiles taking precedence.
+
+## Machines
+
+Machine configs represent specific computers. They inherit from profiles and add machine-specific settings:
+
+```yaml
+# machines/workstation.yaml
+machine:
+  hostname: archlinux
+  description: Primary desktop with 3 monitors
+
+inherits:
+  - desktop
+
+settings:
+  gpu: nvidia
+  monitors: 3
+
+features:
+  - docker
+  - ssh
+```
+
+## Packages
+
+Package manifests define which packages to install using different package managers:
+
+```yaml
+# packages/common.yaml - Cross-platform (nix)
+nix:
+  - ripgrep
+  - fd
+  - fzf
+  - bat
+  - eza
+  - lazygit
+```
+
+```yaml
+# packages/arch.yaml - Arch Linux specific
+system:
+  arch:
+    - base-devel
+    - git
+    - fish
+    - kitty
+    - hyprland
+    - waybar
+
+aur:
+  - visual-studio-code-bin
+```
+
+See [Packages](/docs/packages) for detailed package configuration.
+
+## Configs Directory
+
+The `configs/` directory contains your actual dotfiles, organized by category:
+
+```
+configs/
+├── shell/
+│   └── .config/
+│       └── fish/
+│           └── config.fish
+├── editor/
+│   └── .config/
+│       └── nvim/
+│           └── init.lua
+└── terminal/
+    └── .config/
+        └── kitty/
+            └── kitty.conf
+```
+
+<Callout type="info">
+  Files in configs are symlinked to your home directory, preserving the path structure. For example, `configs/shell/.config/fish/config.fish` becomes `~/.config/fish/config.fish`.
+</Callout>
+
+## Settings
+
+Settings are key-value pairs that flow through the inheritance chain:
+
+```yaml
+settings:
+  shell: fish
+  editor: nvim
+  theme: catppuccin
+  monitors: 1
+  gpu: intel
+```
+
+These can be used in templates and are available during the setup process.
+
+## Features
+
+Features are toggleable capabilities that can trigger additional setup:
+
+```yaml
+features:
+  - ssh        # SSH key setup
+  - github     # GitHub CLI authentication
+  - docker     # Docker installation
+  - gui        # GUI applications
+```
+
+Features influence which packages are installed and which setup steps are run.

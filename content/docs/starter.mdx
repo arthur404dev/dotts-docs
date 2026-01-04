@@ -1,0 +1,131 @@
+---
+title: Starter Template
+description: Get started quickly with the dotts-starter template
+---
+
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+# Starter Template
+
+The [dotts-starter](https://github.com/arthur404dev/dotts-starter) repository provides an opinionated starting point for your dotfiles. It includes pre-configured setups for shell, editor, terminal, and desktop environments.
+
+## What's Included
+
+<Files>
+  <Folder name="dotts-starter" defaultOpen>
+    <File name="config.yaml" />
+    <Folder name="profiles" defaultOpen>
+      <File name="base.yaml" />
+      <File name="linux.yaml" />
+      <File name="desktop.yaml" />
+    </Folder>
+    <Folder name="packages" defaultOpen>
+      <File name="common.yaml" />
+      <File name="arch.yaml" />
+    </Folder>
+    <Folder name="machines">
+      <File name="workstation.yaml" />
+    </Folder>
+    <Folder name="configs" defaultOpen>
+      <Folder name="shell">
+        <File name=".config/fish/" />
+      </Folder>
+      <Folder name="editor">
+        <File name=".config/nvim/" />
+      </Folder>
+      <Folder name="terminal">
+        <File name=".config/kitty/" />
+      </Folder>
+      <Folder name="git">
+        <File name=".config/git/config" />
+      </Folder>
+      <Folder name="tools">
+        <File name=".config/lazygit/" />
+        <File name=".config/btop/" />
+      </Folder>
+      <Folder name="wm">
+        <File name=".config/hypr/" />
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
+## Configurations
+
+### Shell
+
+- **Fish shell** with useful aliases and functions
+- **Starship** prompt configuration
+- **Zoxide** for smart directory jumping
+
+### Editor
+
+- **Neovim** with LazyVim-based configuration
+- LSP support, fuzzy finding, and more
+- Catppuccin theme
+
+### Terminal
+
+- **Kitty** terminal emulator
+- **Foot** as a lightweight alternative
+- **Wezterm** configuration
+
+### Tools
+
+- **lazygit** for git workflows
+- **btop** for system monitoring
+- **fastfetch** for system info
+- **lsd** for pretty directory listings
+
+### Desktop (Linux only)
+
+- **Hyprland** Wayland compositor
+- **Waybar** status bar
+- **Dunst** notifications
+- **Fuzzel** application launcher
+
+## Using the Starter
+
+When you run `dotts init`, you can select the starter template:
+
+```bash
+dotts init
+```
+
+Select **"Use dotts-starter (recommended)"** when prompted for a config source.
+
+<Callout type="info">
+  The starter is opinionated but flexible. You can uncheck any configuration modules you don't want during the interactive setup.
+</Callout>
+
+## Forking the Starter
+
+If you want to customize the starter and track your own changes:
+
+1. Fork the [dotts-starter repository](https://github.com/arthur404dev/dotts-starter)
+2. During `dotts init`, select **"Use your own repository"**
+3. Enter your fork's URL
+
+## Templates
+
+The starter uses template placeholders for personal information:
+
+```ini
+[user]
+  name = <<dotts:user.name>>
+  email = <<dotts:user.email>>
+```
+
+These are replaced with your actual values during the setup process. See [Templates](/docs/templates) for more information.
+
+## Customizing
+
+After cloning the starter, you can customize any configuration:
+
+1. **Add new configs** - Create a folder in `configs/` with your dotfiles
+2. **Add packages** - Edit the YAML files in `packages/`
+3. **Create profiles** - Define new profiles in `profiles/`
+4. **Machine configs** - Add machine-specific settings in `machines/`
+
+See the [Configuration](/docs/configuration) guide for detailed documentation.

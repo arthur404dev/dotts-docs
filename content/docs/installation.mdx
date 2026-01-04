@@ -1,0 +1,117 @@
+---
+title: Installation
+description: How to install dotts on your system
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+# Installation
+
+dotts can be installed on Linux and macOS. Choose your preferred method below.
+
+## Quick Install
+
+The fastest way to install dotts is using our install script:
+
+<Tabs items={['curl', 'wget']}>
+  <Tab value="curl">
+```bash
+curl -fsSL https://dotts.4o4.sh/install.sh | bash
+```
+  </Tab>
+  <Tab value="wget">
+```bash
+wget -qO- https://dotts.4o4.sh/install.sh | bash
+```
+  </Tab>
+</Tabs>
+
+This will:
+1. Detect your operating system and architecture
+2. Download the latest release from GitHub
+3. Install the binary to `~/.local/bin`
+4. Add the directory to your PATH
+
+## Environment Variables
+
+You can customize the installation with environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DOTTS_VERSION` | Specific version to install | `latest` |
+| `DOTTS_DIR` | Installation directory | `~/.local/bin` |
+| `DOTTS_NO_MODIFY_PATH` | Skip PATH modification | unset |
+
+Example with custom options:
+
+```bash
+DOTTS_VERSION=v1.0.0 DOTTS_DIR=/usr/local/bin curl -fsSL https://dotts.4o4.sh/install.sh | bash
+```
+
+## Manual Installation
+
+If you prefer to install manually, download the appropriate binary from the [GitHub releases page](https://github.com/arthur404dev/dotts/releases).
+
+### Linux (amd64)
+
+```bash
+curl -LO https://github.com/arthur404dev/dotts/releases/latest/download/dotts_linux_amd64.tar.gz
+tar -xzf dotts_linux_amd64.tar.gz
+sudo mv dotts /usr/local/bin/
+```
+
+### Linux (arm64)
+
+```bash
+curl -LO https://github.com/arthur404dev/dotts/releases/latest/download/dotts_linux_arm64.tar.gz
+tar -xzf dotts_linux_arm64.tar.gz
+sudo mv dotts /usr/local/bin/
+```
+
+### macOS (Apple Silicon)
+
+```bash
+curl -LO https://github.com/arthur404dev/dotts/releases/latest/download/dotts_darwin_arm64.tar.gz
+tar -xzf dotts_darwin_arm64.tar.gz
+sudo mv dotts /usr/local/bin/
+```
+
+### macOS (Intel)
+
+```bash
+curl -LO https://github.com/arthur404dev/dotts/releases/latest/download/dotts_darwin_amd64.tar.gz
+tar -xzf dotts_darwin_amd64.tar.gz
+sudo mv dotts /usr/local/bin/
+```
+
+## Building from Source
+
+<Callout type="info">
+  Building from source requires Go 1.21 or later.
+</Callout>
+
+```bash
+git clone https://github.com/arthur404dev/dotts.git
+cd dotts
+make build
+sudo mv dotts /usr/local/bin/
+```
+
+## Verify Installation
+
+After installation, verify that dotts is working:
+
+```bash
+dotts --version
+```
+
+## Next Steps
+
+Now that dotts is installed, run the initialization wizard:
+
+```bash
+dotts init
+```
+
+See the [Starter Template](/docs/starter) guide for more information on getting started.

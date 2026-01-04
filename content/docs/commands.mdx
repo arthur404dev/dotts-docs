@@ -1,0 +1,186 @@
+---
+title: Commands
+description: Complete reference for all dotts CLI commands
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+# Commands
+
+dotts provides a simple set of commands for managing your dotfiles.
+
+## dotts init
+
+Initialize dotts on a new system. This runs an interactive wizard that guides you through the setup process.
+
+```bash
+dotts init
+```
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--source <url>` | Config source URL (skip source selection) |
+| `--machine <name>` | Machine config name (skip machine selection) |
+| `--no-auth` | Skip authentication setup |
+| `--skip-apply` | Skip package installation and dotfile linking |
+| `--dry-run` | Show what would be done without making changes |
+| `--skip-packages` | Skip package installation |
+| `--skip-dotfiles` | Skip dotfile linking |
+
+### Examples
+
+```bash
+# Full interactive setup
+dotts init
+
+# Skip to applying with a specific machine config
+dotts init --machine workstation
+
+# Preview what would happen without making changes
+dotts init --dry-run
+```
+
+## dotts update
+
+Pull the latest configuration and apply changes.
+
+```bash
+dotts update
+```
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--dry-run` | Show what would change without applying |
+| `--packages-only` | Only update packages |
+| `--dotfiles-only` | Only update dotfiles |
+| `-y, --yes` | Skip confirmation prompts |
+
+### Examples
+
+```bash
+# Update everything
+dotts update
+
+# Preview changes first
+dotts update --dry-run
+
+# Only update packages
+dotts update --packages-only
+```
+
+## dotts status
+
+Show the current configuration state.
+
+```bash
+dotts status
+```
+
+This displays:
+- Current machine configuration
+- Active profile chain
+- Linked dotfiles status
+- Installed packages
+
+## dotts sync
+
+Sync local dotfile changes back to the config repository.
+
+```bash
+dotts sync
+```
+
+<Callout type="info">
+  This command detects changes you've made to dotfiles and copies them back to your config repo for committing.
+</Callout>
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--dry-run` | Show what would be synced |
+| `-a, --all` | Sync all changed files |
+
+## dotts doctor
+
+Check system health and diagnose issues.
+
+```bash
+dotts doctor
+```
+
+This command verifies:
+- Required dependencies are installed
+- Config repository is accessible
+- Symlinks are valid
+- Package managers are available
+
+## dotts config
+
+Manage the config source.
+
+```bash
+dotts config
+```
+
+### Subcommands
+
+```bash
+# Show current config source
+dotts config show
+
+# Change config source
+dotts config set <url>
+
+# Pull latest changes
+dotts config pull
+```
+
+## dotts machine
+
+Manage machine configurations.
+
+```bash
+dotts machine
+```
+
+### Subcommands
+
+```bash
+# List available machines
+dotts machine list
+
+# Show current machine
+dotts machine show
+
+# Switch to a different machine config
+dotts machine switch <name>
+
+# Create a new machine config
+dotts machine create <name>
+```
+
+## Global Options
+
+These options are available for all commands:
+
+| Flag | Description |
+|------|-------------|
+| `-h, --help` | Show help for any command |
+| `-v, --version` | Show dotts version |
+| `--verbose` | Enable verbose output |
+| `--no-color` | Disable colored output |
+
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Success |
+| `1` | General error |
+| `2` | Configuration error |
+| `3` | Network error |
+| `4` | Permission error |

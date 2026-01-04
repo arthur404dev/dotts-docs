@@ -1,0 +1,17 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "installation",
+    "---Getting Started---",
+    "starter",
+    "configuration",
+    "---Usage---",
+    "commands",
+    "profiles",
+    "packages",
+    "---Advanced---",
+    "alternates",
+    "templates"
+  ]
+}

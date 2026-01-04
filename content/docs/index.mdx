@@ -1,13 +1,90 @@
 ---
-title: Hello World
-description: Your first document
+title: Introduction
+description: Welcome to dotts - the universal dotfiles manager
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
-## What is Next?
+# Welcome to dotts
+
+**dotts** is a beautiful CLI for managing dotfiles across multiple machines and platforms. It provides an interactive TUI wizard, profile-based configuration inheritance, and support for multiple package managers.
+
+## Why dotts?
+
+Managing dotfiles across different machines can be painful. You end up with a mess of symlinks, shell scripts, and manual interventions. dotts solves this with:
+
+- **Profile Inheritance** - Define base configs and extend them for specific machines
+- **Alternate Files** - Use the `##` suffix pattern for machine-specific variations
+- **Interactive Setup** - Beautiful TUI wizard guides you through the process
+- **Package Management** - Install packages with nix, brew, pacman, apt, and more
+
+## Quick Start
+
+Install dotts with a single command:
+
+<Tabs items={['curl', 'wget']}>
+  <Tab value="curl">
+```bash
+curl -fsSL https://dotts.4o4.sh/install.sh | bash
+```
+  </Tab>
+  <Tab value="wget">
+```bash
+wget -qO- https://dotts.4o4.sh/install.sh | bash
+```
+  </Tab>
+</Tabs>
+
+Then initialize your system:
+
+```bash
+dotts init
+```
+
+The interactive wizard will guide you through:
+
+1. Selecting a config source (starter template, fork, or your own repo)
+2. Configuring your machine profile
+3. Setting up personal information for templates
+4. Choosing which features to enable
+5. Installing packages and linking dotfiles
+
+## How It Works
+
+dotts separates the **tool** from your **configuration**:
+
+<Files>
+  <Folder name="dotts (CLI)" defaultOpen>
+    <File name="System detection" />
+    <File name="Package installation" />
+    <File name="Dotfile linking" />
+    <File name="TUI wizard" />
+  </Folder>
+  <Folder name="your-dotfiles (Repo)" defaultOpen>
+    <Folder name="profiles">
+      <File name="base.yaml" />
+      <File name="linux.yaml" />
+      <File name="desktop.yaml" />
+    </Folder>
+    <Folder name="packages">
+      <File name="common.yaml" />
+      <File name="arch.yaml" />
+    </Folder>
+    <Folder name="configs">
+      <File name="shell/" />
+      <File name="editor/" />
+      <File name="terminal/" />
+    </Folder>
+  </Folder>
+</Files>
+
+## Next Steps
 
 <Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
+  <Card title="Installation" href="/docs/installation" />
+  <Card title="Configuration" href="/docs/configuration" />
+  <Card title="Commands" href="/docs/commands" />
+  <Card title="Starter Template" href="/docs/starter" />
 </Cards>
