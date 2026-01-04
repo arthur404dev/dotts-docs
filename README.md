@@ -34,6 +34,20 @@ A `source.config.ts` config file has been included, you can customise different 
 
 Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
 
+## Versioning
+
+The documentation uses route-based versioning. Current docs live at `/docs` (latest).
+
+When ready to archive a version (e.g., when releasing v0.2):
+
+```bash
+pnpm version:archive 0.1
+```
+
+This copies current docs to `/v0.1/docs/...` and keeps `/docs/` as latest.
+
+See [VERSIONING.md](./VERSIONING.md) for full details.
+
 ## Learn More
 
 To learn more about Next.js and Fumadocs, take a look at the following

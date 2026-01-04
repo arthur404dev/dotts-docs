@@ -1,0 +1,11 @@
+{
+  "current": "0.1",
+  "versions": [
+    {
+      "id": "latest",
+      "label": "v0.1.x (latest)",
+      "path": "/docs",
+      "isLatest": true
+    }
+  ]
+}

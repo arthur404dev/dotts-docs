@@ -1,7 +1,11 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 import { Terminal } from "lucide-react";
+import { VersionSelector } from "@/components/version-selector";
+import { getVersionConfig } from "@/lib/version";
 
 export function baseOptions(): BaseLayoutProps {
+  const versionConfig = getVersionConfig();
+
   return {
     nav: {
       title: (
@@ -10,6 +14,7 @@ export function baseOptions(): BaseLayoutProps {
           <span>dotts</span>
         </div>
       ),
+      children: <VersionSelector config={versionConfig} />,
     },
     links: [
       {

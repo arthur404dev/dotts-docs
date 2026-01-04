@@ -9,7 +9,11 @@
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "version:archive": "./scripts/version.sh archive",
+    "version:list": "./scripts/version.sh list",
+    "version:current": "./scripts/version.sh current",
+    "version:sync": "./scripts/version.sh sync-to-dotts"
   },
   "dependencies": {
     "fumadocs-core": "16.4.3",
