@@ -57,15 +57,15 @@ export default function HomePage() {
 
         <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-fd-border bg-fd-muted/50 px-4 py-1.5 text-sm">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-fd-primary opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-fd-primary" />
           </span>
           <span>v1.0 coming soon</span>
         </div>
 
         <h1 className="max-w-4xl text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
           Manage your{" "}
-          <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <span className="text-gradient">
             dotfiles
           </span>{" "}
           with style

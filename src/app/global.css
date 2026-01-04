@@ -2,6 +2,13 @@
 @import "fumadocs-ui/css/dusk.css";
 @import "fumadocs-ui/css/preset.css";
 
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-fd-primary), var(--color-fd-ring));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .hero-gradient {
   background: radial-gradient(
     ellipse 80% 50% at 50% -20%,
