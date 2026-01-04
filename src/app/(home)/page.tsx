@@ -8,7 +8,7 @@ import {
   Terminal,
 } from "lucide-react";
 import Link from "next/link";
-import { CopyButton } from "@/components/copy-button";
+import { AnimatedTerminal } from "@/components/animated-terminal";
 
 const features = [
   {
@@ -92,30 +92,8 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="mt-12 w-full max-w-xl">
-          <div className="group relative rounded-lg border border-fd-border bg-fd-card p-4 shadow-lg">
-            <div className="flex items-center gap-2 text-fd-muted-foreground">
-              <div className="flex gap-1.5">
-                <div className="size-3 rounded-full bg-red-500/80" />
-                <div className="size-3 rounded-full bg-yellow-500/80" />
-                <div className="size-3 rounded-full bg-green-500/80" />
-              </div>
-              <span className="ml-2 text-xs">Terminal</span>
-            </div>
-            <div className="mt-4 flex items-center justify-between">
-              <code className="font-mono text-sm md:text-base">
-                <span className="text-fd-muted-foreground">$ </span>
-                <span className="text-purple-400">curl</span>
-                <span className="text-fd-foreground"> -fsSL </span>
-                <span className="text-green-400">
-                  https://dotts.4o4.sh/install.sh
-                </span>
-                <span className="text-fd-foreground"> | </span>
-                <span className="text-purple-400">bash</span>
-              </code>
-              <CopyButton text="curl -fsSL https://dotts.4o4.sh/install.sh | bash" />
-            </div>
-          </div>
+        <div className="mt-12 flex w-full justify-center">
+          <AnimatedTerminal />
         </div>
       </section>
 
