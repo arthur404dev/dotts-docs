@@ -1,37 +1,11 @@
 @import "tailwindcss";
-@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/dusk.css";
 @import "fumadocs-ui/css/preset.css";
-
-:root {
-  --color-fd-primary: oklch(0.7 0.15 280);
-  --color-fd-background: oklch(0.985 0.002 280);
-  --color-fd-foreground: oklch(0.2 0.02 280);
-  --color-fd-muted: oklch(0.95 0.01 280);
-  --color-fd-muted-foreground: oklch(0.45 0.02 280);
-  --color-fd-card: oklch(0.99 0.002 280);
-  --color-fd-border: oklch(0.9 0.01 280);
-  --color-fd-accent: oklch(0.7 0.15 280);
-  --color-fd-accent-foreground: oklch(0.99 0.002 280);
-  --color-fd-ring: oklch(0.7 0.15 280);
-}
-
-.dark {
-  --color-fd-primary: oklch(0.75 0.15 280);
-  --color-fd-background: oklch(0.14 0.02 280);
-  --color-fd-foreground: oklch(0.93 0.01 280);
-  --color-fd-muted: oklch(0.2 0.015 280);
-  --color-fd-muted-foreground: oklch(0.65 0.02 280);
-  --color-fd-card: oklch(0.17 0.02 280);
-  --color-fd-border: oklch(0.25 0.02 280);
-  --color-fd-accent: oklch(0.75 0.15 280);
-  --color-fd-accent-foreground: oklch(0.14 0.02 280);
-  --color-fd-ring: oklch(0.75 0.15 280);
-}
 
 .hero-gradient {
   background: radial-gradient(
     ellipse 80% 50% at 50% -20%,
-    oklch(0.7 0.15 280 / 0.15),
+    var(--color-fd-primary) / 0.15,
     transparent
   );
 }
@@ -39,7 +13,7 @@
 .dark .hero-gradient {
   background: radial-gradient(
     ellipse 80% 50% at 50% -20%,
-    oklch(0.75 0.15 280 / 0.2),
+    var(--color-fd-primary) / 0.2,
     transparent
   );
 }
@@ -55,29 +29,9 @@
 }
 
 .feature-card:hover {
-  border-color: oklch(0.7 0.15 280 / 0.5);
+  border-color: var(--color-fd-primary) / 0.5;
   box-shadow:
     0 10px 15px -3px rgb(0 0 0 / 0.1),
     0 4px 6px -4px rgb(0 0 0 / 0.1);
   transform: translateY(-2px);
-}
-
-.dark .feature-card:hover {
-  border-color: oklch(0.75 0.15 280 / 0.5);
-}
-
-.dark ::selection {
-  background-color: oklch(0.75 0.15 280 / 0.4);
-  color: oklch(0.98 0.01 280);
-}
-
-.dark code:not(pre code) {
-  background-color: oklch(0.25 0.02 280);
-  color: oklch(0.92 0.01 280);
-}
-
-.dark .prose {
-  --tw-prose-body: oklch(0.9 0.01 280);
-  --tw-prose-headings: oklch(0.95 0.01 280);
-  --tw-prose-bold: oklch(0.95 0.01 280);
 }

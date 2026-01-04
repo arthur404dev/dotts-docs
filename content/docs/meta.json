@@ -1,16 +1,17 @@
 {
   "title": "Documentation",
+  "icon": "Book",
   "pages": [
     "index",
     "installation",
-    "---Getting Started---",
+    "---[Rocket]Getting Started---",
     "starter",
     "configuration",
-    "---Usage---",
+    "---[Terminal]Usage---",
     "commands",
     "profiles",
     "packages",
-    "---Advanced---",
+    "---[Settings]Advanced---",
     "alternates",
     "templates"
   ]
