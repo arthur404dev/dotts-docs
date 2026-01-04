@@ -2,18 +2,45 @@
 
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import type { VersionConfig } from "@/lib/version";
+import type { VersionConfig, Version } from "@/lib/version";
 
 interface VersionSelectorProps {
   config: VersionConfig;
 }
 
+/**
+ * Extracts the slug part after /docs/ from a pathname.
+ * Examples:
+ *   "/docs/installation" -> "installation"
+ *   "/v0.1/docs/commands/sync" -> "commands/sync"
+ *   "/docs" -> ""
+ *   "/v0.1/docs" -> ""
+ */
+function extractSlug(pathname: string): string {
+  // Match either /docs/... or /v{version}/docs/...
+  const match = pathname.match(/^(?:\/v[\d.]+)?\/docs(?:\/(.*))?$/);
+  if (match) {
+    return match[1] || "";
+  }
+  return "";
+}
+
+function buildVersionHref(version: Version, currentSlug: string): string {
+  if (!currentSlug) {
+    return version.path;
+  }
+  return `${version.path}/${currentSlug}`;
+}
+
 export function VersionSelector({ config }: VersionSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const currentVersion = config.versions.find((v) => v.isLatest);
+  const currentSlug = extractSlug(pathname);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -64,7 +91,7 @@ export function VersionSelector({ config }: VersionSelectorProps) {
           {config.versions.map((version) => (
             <Link
               key={version.id}
-              href={version.path}
+              href={buildVersionHref(version, currentSlug)}
               className={`flex items-center justify-between gap-2 px-3 py-2 text-sm transition-colors hover:bg-fd-muted ${
                 version.isLatest
                   ? "bg-fd-muted/50 text-fd-primary"
